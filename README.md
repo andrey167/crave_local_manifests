@@ -2,7 +2,7 @@
 ### Usage
 
 ```bash
-crave run --no-patch -- "curl https://raw.githubusercontent.com/Crave-platina/android_local_manifests/refs/heads/main/build_script.sh | bash"
+crave run --no-patch -- "curl https://raw.githubusercontent.com/andrey167/crave_local_manifests/refs/heads/aosp-15/build_script.sh | bash"
 ```
 
 ### Reference
