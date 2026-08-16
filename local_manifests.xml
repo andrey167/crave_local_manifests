@@ -2,21 +2,19 @@
 <manifest>
 
     <!-- Remotes -->
-    <remote name="main"
-        fetch="https://github.com/username/" />
-    <remote name="rom"
-        fetch="https://github.com/ExampleROM/" />
-    <remote name="device"
-        fetch="https://github.com/ExampleROM-device/" />
+            <remote name="device"
+        fetch="https://github.com/andrey167/" />
+    <remote name="los"
+        fetch="https://github.com/LineageOS/" />
+         <remote name="platina"
+        fetch="https://github.com/LineageOS-platina/" />
 
     <!-- Device Sources -->
-    <project path="device/manufacturer/codename" name="android_device_manufacturer_codename" remote="device" revision="device-branch" clone-depth="1" />
-    <project path="kernel/manufacturer/codename" name="android_kernel_manufacturer_codename" remote="main" revision="kernel-branch" clone-depth="1" />
-    <project path="vendor/manufacturer/codename" name="android_vendor_manufacturer_codename" remote="device" revision="vendor-branch" clone-depth="1" />
+    <project path="device/xiaomi/platina" name="android_device_xiaomi_platina_evox" remote="device" revision="evox" clone-depth="1" />
+    <project path="kernel/xiaomi/platina" name="platinum_kernel_xiaomi_platina" remote="device" revision="non-ksub" clone-depth="1" />
+    <project path="vendor/xiaomi/platina" name="android_vendor_xiaomi_platina" remote="platina" revision="lineage-22.2" clone-depth="1" />
 
-    <!-- ROM Sources -->
-    <project path="hardware/sample" name="android_hardware_sample" remote="rom" revision="rom-branch" clone-depth="1" />
-    <remove-project name="android_packages_apps_SampleApp" />
-    <project path="packages/apps/SampleApp" name="android_packages_apps_SampleApp" remote="rom" revision="rom-branch" clone-depth="1" />
+
+  <project path="hardware/xiaomi" name="android_hardware_xiaomi" remote="los" revision="lineage-22.2" clone-depth="1" />
 
 </manifest>
