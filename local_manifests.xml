@@ -14,7 +14,6 @@
     <project path="kernel/xiaomi/platina" name="platinum_kernel_xiaomi_platina" remote="device" revision="non-ksub" clone-depth="1" />
     <project path="vendor/xiaomi/platina" name="android_vendor_xiaomi_platina" remote="platina" revision="lineage-22.2" clone-depth="1" />
 
-<remove-project name="Evolution-X-Devices/packages_apps_ViPER4AndroidFX" />
   <project path="packages/apps/ViPER4AndroidFX" 
            name="andrey167/packages_apps_ViPER4AndroidFX" 
            remote="github" 
