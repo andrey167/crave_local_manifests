@@ -24,6 +24,10 @@ echo "==> Syncing source..."
 # BUILD SETUP
 ########################################
 
+echo "==> Removing old rom zip files..."
+rm -f out/target/product/platina/EvolutionX*.zip
+rm -f out/target/product/platina/*.zip
+
 echo "==> Preparing environment..."
 . build/envsetup.sh
 
