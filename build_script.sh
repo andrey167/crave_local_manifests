@@ -52,7 +52,14 @@ lunch lineage_platina-bp1a-userdebug
 
 echo "==> Cleaning previous build outputs..."
 m installclean
-m evolution
+
+echo "==> Starting ROM compilation..."
+if ! m evolution; then
+    echo "=================================================="
+    echo "==> ERROR: Compilation failed during 'm evolution'!"
+    echo "=================================================="
+    exit 1
+fi
 
 ########################################
 # UPLOAD AND CLEANUP
@@ -79,20 +86,22 @@ if [ -n "$ZIP_FILE" ] && [ -f "$ZIP_FILE" ]; then
     IS_SUCCESS=$(echo "$UPLOAD_RES" | grep -o '"status":"ok"')
 
     if [ -n "$IS_SUCCESS" ]; then
-        # 
         DOWNLOAD_PAGE=$(echo "$UPLOAD_RES" | grep -o '"downloadPage":"[^"]*' | cut -d'"' -f4)
 
         echo ""
         echo "=================================================="
         echo "DOWNLOAD LINK: $DOWNLOAD_PAGE"
         echo "=================================================="
+        echo "==> All tasks completed successfully!"
     else
         echo ""
-        echo "==> UPLOAD FAILED!"
+        echo "==> ERROR: UPLOAD FAILED!"
         echo "Server Response: $UPLOAD_RES"
+        exit 1
     fi
 else
+    echo "=================================================="
     echo "==> ERROR: Zip file not found in out/target/product/platina/"
+    echo "=================================================="
+    exit 1
 fi
-
-echo "==> All tasks completed successfully!"
