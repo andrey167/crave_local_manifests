@@ -68,40 +68,33 @@ fi
 ZIP_FILE=$(ls -t out/target/product/platina/EvolutionX*.zip 2>/dev/null | head -n 1)
 
 if [ -n "$ZIP_FILE" ] && [ -f "$ZIP_FILE" ]; then
-    echo "==> Build finished! Uploading $ZIP_FILE to GoFile..."
+    echo "==> Uploading $ZIP_FILE to GoFile..."
+    SERVER=""
+    for i in {1..3}; do
+        SERVER_RESP=$(curl -s https://api.gofile.io/servers)
+        SERVER=$(echo "$SERVER_RESP" | grep -o '"name":"[^"]*' | head -n 1 | cut -d'"' -f4)
+        [ -n "$SERVER" ] && break
+        sleep 3
+    done
 
-    SERVER_RESP=$(curl -s https://api.gofile.io/servers)
-    SERVER=$(echo "$SERVER_RESP" | grep -o '"name":"[^"]*' | head -n 1 | cut -d'"' -f4)
-
-    if [ -z "$SERVER" ]; then
-        echo "==> ERROR: Failed to get GoFile server!"
-        echo "Response: $SERVER_RESP"
-        exit 1
+    UPLOAD_SUCCESS=false
+    if [ -n "$SERVER" ]; then
+        UPLOAD_RES=$(curl -# -F "file=@$ZIP_FILE" "https://${SERVER}.gofile.io/contents/uploadfile")
+        if echo "$UPLOAD_RES" | grep -q '"status":"ok"'; then
+            DOWNLOAD_PAGE=$(echo "$UPLOAD_RES" | grep -o '"downloadPage":"[^"]*' | cut -d'"' -f4)
+            echo "=================================================="
+            echo "GOFILE VANILLA LINK: $DOWNLOAD_PAGE"
+            echo "=================================================="
+            UPLOAD_SUCCESS=true
+        fi
     fi
 
-    echo "==> Using GoFile server: $SERVER"
-
-    UPLOAD_RES=$(curl -# -F "file=@$ZIP_FILE" "https://${SERVER}.gofile.io/contents/uploadfile")
-
-    IS_SUCCESS=$(echo "$UPLOAD_RES" | grep -o '"status":"ok"')
-
-    if [ -n "$IS_SUCCESS" ]; then
-        DOWNLOAD_PAGE=$(echo "$UPLOAD_RES" | grep -o '"downloadPage":"[^"]*' | cut -d'"' -f4)
-
-        echo ""
+    if [ "$UPLOAD_SUCCESS" = false ]; then
+        echo "==> FALLBACK: Uploading to Pixeldrain..."
+        PD_RESPONSE=$(curl -s -F "file=@$ZIP_FILE" https://pixeldrain.com/api/file/)
+        PD_FILE_ID=$(echo "$PD_RESPONSE" | grep -o '"id":"[^"]*' | cut -d'"' -f4)
         echo "=================================================="
-        echo "DOWNLOAD LINK: $DOWNLOAD_PAGE"
+        echo "PIXELDRAIN VANILLA LINK: https://pixeldrain.com/u/$PD_FILE_ID"
         echo "=================================================="
-        echo "==> All tasks completed successfully!"
-    else
-        echo ""
-        echo "==> ERROR: UPLOAD FAILED!"
-        echo "Server Response: $UPLOAD_RES"
-        exit 1
     fi
-else
-    echo "=================================================="
-    echo "==> ERROR: Zip file not found in out/target/product/platina/"
-    echo "=================================================="
-    exit 1
 fi
