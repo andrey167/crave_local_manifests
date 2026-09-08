@@ -10,14 +10,10 @@
         fetch="https://github.com/LineageOS-platina/" />
 
     <!-- Device Sources -->
-    <project path="device/xiaomi/platina" name="android_device_xiaomi_platina_evox" remote="device" revision="evox" clone-depth="1" />
-    <project path="kernel/xiaomi/platina" name="platinum_kernel_xiaomi_platina" remote="device" revision="non-ksub" clone-depth="1" />
+    <project path="device/xiaomi/platina" name="android_device_xiaomi_platina" remote="device" revision="aosp16" clone-depth="1" />
+    <project path="kernel/xiaomi/platina" name="kernel_xiaomi_platina" remote="device" revision="16.0-EAS" clone-depth="1" />
     <project path="vendor/xiaomi/platina" name="android_vendor_xiaomi_platina" remote="platina" revision="lineage-22.2" clone-depth="1" />
 
-  <project path="packages/apps/ViPER4AndroidFX" 
-           name="andrey167/packages_apps_ViPER4AndroidFX" 
-           remote="github" 
-           revision="vic" />
   <project path="hardware/xiaomi" name="android_hardware_xiaomi" remote="los" revision="lineage-22.2" clone-depth="1" />
 
 </manifest>
