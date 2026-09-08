@@ -8,8 +8,8 @@ echo "==> Resetting manifests..."
 rm -rf .repo/local_manifests
 
 echo "==> Initializing repo..."
-repo init -u https://github.com/AndroidOne-Experience/manifest.git -b 16-QPR2 --depth=1 --git-lfs
-git clone https://github.com/andrey167/crave_local_manifests -b aosp16 .repo/local_manifests
+repo init -u https://github.com/Lunaris-AOSP/android -b 16.2 --depth=1 --git-lfs
+git clone https://github.com/andrey167/crave_local_manifests -b lunaris .repo/local_manifests
 
 ########################################
 # SYNC SOURCE
@@ -25,7 +25,7 @@ echo "==> Syncing source..."
 ########################################
 
 echo "==> Removing old rom zip files..."
-rm -f out/target/product/platina/AndroidOne*.zip
+rm -f out/target/product/platina/Lunaris*.zip
 rm -f out/target/product/platina/*.zip
 
 echo "==> Preparing environment..."
@@ -43,20 +43,20 @@ grep -n "modemService" packages/services/Telephony/src/com/android/phone/Carrier
 
 git clone https://github.com/andrey167/platinakeys vendor/evolution-priv/keys
 
-grep -q "vendor/evolution-priv/keys/keys.mk" device/xiaomi/platina/BoardConfig.mk || sed -i '$ a -include vendor/evolution-priv/keys/keys.mk' device/xiaomi/platina/aosp_platina.mk
-#sed -i 's/PRODUCT_CERTIFICATE_OVERRIDES/PRODUCT_PACKAGE_NAME_OVERRIDES/g' vendor/evolution-priv/keys/keys.mk
-tail -5 device/xiaomi/platina/aosp_platina.mk
+grep -q "vendor/lineage-priv/keys/keys.mk" device/xiaomi/platina/BoardConfig.mk || sed -i '$ a -include vendor/lineage-priv/keys/keys.mk' device/xiaomi/platina/lineage_platina.mk
+#sed -i 's/PRODUCT_CERTIFICATE_OVERRIDES/PRODUCT_PACKAGE_NAME_OVERRIDES/g' vendor/lineage-priv/keys/keys.mk
+tail -5 device/xiaomi/platina/lineage_platina.mk
 
 echo "==> Lunching target..."
-lunch aosp_platina-bp1a-user
+lunch lineage_platina-bp4a-user
 
 echo "==> Cleaning previous build outputs..."
 m installclean
 
 echo "==> Starting ROM compilation..."
-if ! mka bacon; then
+if ! m bacon; then
     echo "=================================================="
-    echo "==> ERROR: Compilation failed during 'mka bacon'!"
+    echo "==> ERROR: Compilation failed during 'm bacon'!"
     echo "=================================================="
     exit 1
 fi
@@ -65,7 +65,7 @@ fi
 # UPLOAD AND CLEANUP
 ########################################
 
-ZIP_FILE=$(ls -t out/target/product/platina/AndroidOne*.zip 2>/dev/null | head -n 1)
+ZIP_FILE=$(ls -t out/target/product/platina/Lunaris*.zip 2>/dev/null | head -n 1)
 
 if [ -n "$ZIP_FILE" ] && [ -f "$ZIP_FILE" ]; then
     echo "==> Uploading $ZIP_FILE to GoFile..."
